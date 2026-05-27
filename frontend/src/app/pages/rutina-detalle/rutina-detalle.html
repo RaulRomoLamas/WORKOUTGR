@@ -1,0 +1,43 @@
+<section class="page">
+  <a class="btn secondary volver" routerLink="/rutinas">Volver</a>
+
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+  <p class="mensaje" *ngIf="cargando">Cargando detalle...</p>
+
+  <article class="panel" *ngIf="rutina">
+    <div class="page-header">
+      <div>
+        <h1>{{ rutina.nombre }}</h1>
+        <p>{{ rutina.objetivo }} | {{ rutina.nivel | titlecase }}</p>
+      </div>
+      <span class="badge activa">{{ rutina.fecha_asignacion | date:'mediumDate' }}</span>
+    </div>
+
+    <p>{{ rutina.descripcion }}</p>
+    <p><strong>Cliente:</strong> {{ rutina.cliente }} | <strong>Entrenador:</strong> {{ rutina.entrenador }}</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ejercicio</th>
+            <th>Series</th>
+            <th>Repeticiones</th>
+            <th>Descanso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ejercicio of rutina.ejercicios">
+            <td>{{ ejercicio.ejercicio }}</td>
+            <td>{{ ejercicio.series }}</td>
+            <td>{{ ejercicio.repeticiones }}</td>
+            <td>{{ ejercicio.descanso }}</td>
+          </tr>
+          <tr *ngIf="!rutina.ejercicios?.length">
+            <td colspan="4">No hay ejercicios registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

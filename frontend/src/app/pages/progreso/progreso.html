@@ -1,0 +1,107 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>{{ rol === 'cliente' ? 'Mi progreso' : 'Progreso fisico' }}</h1>
+      <p>Historial de mediciones corporales por cliente.</p>
+    </div>
+  </div>
+
+  <form class="panel" [formGroup]="progresoForm" (ngSubmit)="guardar()" *ngIf="puedeEditar()">
+    <div class="form-grid">
+      <div class="field client-search">
+        Cliente
+        <input
+          type="search"
+          name="busquedaCliente"
+          placeholder="Buscar por nombre"
+          [(ngModel)]="busquedaCliente"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="progresoForm.controls.cliente_id.setValue(0)">
+
+        <div class="client-results" *ngIf="busquedaCliente || !progresoForm.controls.cliente_id.value">
+          <button
+            *ngFor="let cliente of clientesFiltrados()"
+            type="button"
+            [class.selected]="progresoForm.controls.cliente_id.value === cliente.id"
+            (click)="seleccionarCliente(cliente)">
+            <span>{{ cliente.nombre }}</span>
+            <small>{{ cliente.correo }}</small>
+          </button>
+
+          <p *ngIf="busquedaCliente && clientesFiltrados().length === 0">Sin coincidencias</p>
+        </div>
+
+        <div class="selected-client" *ngIf="progresoForm.controls.cliente_id.value">
+          <span>{{ clienteSeleccionado() }}</span>
+          <button type="button" (click)="limpiarCliente()">Cambiar</button>
+        </div>
+      </div>
+      <label class="field">Fecha<input type="date" formControlName="fecha_registro"></label>
+      <label class="field">Peso<input type="number" formControlName="peso" min="0"></label>
+      <label class="field">% grasa<input type="number" formControlName="porcentaje_grasa" min="0"></label>
+      <label class="field">Cintura<input type="number" formControlName="cintura" min="0"></label>
+      <label class="field">Pecho<input type="number" formControlName="pecho" min="0"></label>
+      <label class="field">Brazo<input type="number" formControlName="brazo" min="0"></label>
+      <label class="field">Pierna<input type="number" formControlName="pierna" min="0"></label>
+    </div>
+    <label class="field">
+      Observaciones
+      <textarea formControlName="observaciones"></textarea>
+    </label>
+    <div class="actions">
+      <button class="btn" type="submit">{{ editando ? 'Actualizar' : 'Registrar' }}</button>
+      <button class="btn secondary" type="button" (click)="limpiar()">Limpiar</button>
+    </div>
+  </form>
+
+  <p class="mensaje ok" *ngIf="mensaje">{{ mensaje }}</p>
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+
+  <div class="panel table-tools" *ngIf="rol !== 'cliente'">
+    <label class="field">
+      Buscar progreso
+      <input
+        type="search"
+        placeholder="Nombre del cliente"
+        [(ngModel)]="busquedaTabla"
+        [ngModelOptions]="{ standalone: true }">
+    </label>
+  </div>
+
+  <div class="panel table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Peso</th>
+          <th>% Grasa</th>
+          <th>Cintura</th>
+          <th>Pecho</th>
+          <th>Brazo</th>
+          <th>Pierna</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let registro of registrosFiltrados()">
+          <td>{{ registro.cliente }}</td>
+          <td>{{ registro.fecha_registro | date:'mediumDate' }}</td>
+          <td>{{ registro.peso }}</td>
+          <td>{{ registro.porcentaje_grasa }}</td>
+          <td>{{ registro.cintura }}</td>
+          <td>{{ registro.pecho }}</td>
+          <td>{{ registro.brazo }}</td>
+          <td>{{ registro.pierna }}</td>
+          <td>
+            <button class="btn warning" type="button" (click)="editar(registro)" *ngIf="puedeEditar()">Editar</button>
+            <button class="btn secondary" type="button" (click)="eliminar(registro.id)" *ngIf="puedeEditar()">Eliminar</button>
+          </td>
+        </tr>
+        <tr *ngIf="registrosFiltrados().length === 0">
+          <td colspan="9">No hay registros para mostrar.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

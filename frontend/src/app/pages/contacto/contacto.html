@@ -1,0 +1,37 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>Contacto</h1>
+      <p>Formulario template-driven para enviar mensajes al gimnasio.</p>
+    </div>
+  </div>
+
+  <form class="panel grid" #contactoForm="ngForm" (ngSubmit)="enviar()">
+    <div class="form-grid">
+      <label class="field">
+        Nombre
+        <input name="nombre" required [(ngModel)]="mensajeContacto.nombre">
+      </label>
+      <label class="field">
+        Correo
+        <input name="correo" type="email" required [(ngModel)]="mensajeContacto.correo">
+      </label>
+      <label class="field">
+        Asunto
+        <input name="asunto" required [(ngModel)]="mensajeContacto.asunto">
+      </label>
+    </div>
+
+    <label class="field">
+      Mensaje
+      <textarea name="mensaje" required [(ngModel)]="mensajeContacto.mensaje"></textarea>
+    </label>
+
+    <div class="actions">
+      <button class="btn" type="submit" [disabled]="contactoForm.invalid">Enviar mensaje</button>
+    </div>
+  </form>
+
+  <p class="mensaje ok" *ngIf="enviado">{{ enviado }}</p>
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+</section>

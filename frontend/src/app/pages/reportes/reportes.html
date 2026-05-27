@@ -1,0 +1,41 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>Reportes</h1>
+      <p>Indicadores basicos para seguimiento administrativo.</p>
+    </div>
+  </div>
+
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+
+  <div class="summary-grid">
+    <app-card-resumen titulo="Usuarios" [valor]="resumen.totalUsuarios || 0" detalle="Activos" tono="rojo"></app-card-resumen>
+    <app-card-resumen titulo="Clientes" [valor]="resumen.totalClientes || 0" detalle="Registrados" tono="naranja"></app-card-resumen>
+    <app-card-resumen titulo="Entrenadores" [valor]="resumen.totalEntrenadores || 0" detalle="Activos" tono="amarillo"></app-card-resumen>
+    <app-card-resumen titulo="Rutinas" [valor]="resumen.totalRutinas || 0" detalle="Asignadas" tono="rojo"></app-card-resumen>
+  </div>
+
+  <div class="panel table-wrap">
+    <h2>Membresias vencidas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Correo</th>
+          <th>Tipo</th>
+          <th>Fecha fin</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let membresia of vencidas">
+          <td>{{ membresia.cliente }}</td>
+          <td>{{ membresia.correo }}</td>
+          <td>{{ membresia.tipo | titlecase }}</td>
+          <td>{{ membresia.fecha_fin | date:'mediumDate' }}</td>
+          <td>{{ membresia.monto | currency:'MXN':'symbol':'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

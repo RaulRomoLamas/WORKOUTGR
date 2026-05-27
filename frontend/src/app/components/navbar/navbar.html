@@ -1,0 +1,12 @@
+<header class="topbar">
+  <a [routerLink]="rutaInicio()" class="brand">
+    <img class="brand-mark" src="/logoCarbono.png" alt="Carbono Powerlab">
+    <span>CARBONO POWERLAB</span>
+  </a>
+
+  <div class="topbar-user" *ngIf="usuario">
+    <span>{{ usuario.nombre }}</span>
+    <strong>{{ usuario.rol | titlecase }}</strong>
+    <button type="button" (click)="salir()">Salir</button>
+  </div>
+</header>

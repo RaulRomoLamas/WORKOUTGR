@@ -1,0 +1,128 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>{{ rol === 'cliente' ? 'Mis rutinas' : 'Rutinas' }}</h1>
+      <p>Asignacion de planes de entrenamiento y ejercicios.</p>
+    </div>
+  </div>
+
+  <form class="panel" [formGroup]="rutinaForm" (ngSubmit)="guardar()" *ngIf="puedeEditar()">
+    <div class="form-grid">
+      <div class="field client-search">
+        Cliente
+        <input
+          type="search"
+          name="busquedaCliente"
+          placeholder="Buscar por nombre"
+          [(ngModel)]="busquedaCliente"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="rutinaForm.controls.cliente_id.setValue(0)">
+
+        <div class="client-results" *ngIf="busquedaCliente || !rutinaForm.controls.cliente_id.value">
+          <button
+            *ngFor="let cliente of clientesFiltrados()"
+            type="button"
+            [class.selected]="rutinaForm.controls.cliente_id.value === cliente.id"
+            (click)="seleccionarCliente(cliente)">
+            <span>{{ cliente.nombre }}</span>
+            <small>{{ cliente.correo }}</small>
+          </button>
+
+          <p *ngIf="busquedaCliente && clientesFiltrados().length === 0">Sin coincidencias</p>
+        </div>
+
+        <div class="selected-client" *ngIf="rutinaForm.controls.cliente_id.value">
+          <span>{{ clienteSeleccionado() }}</span>
+          <button type="button" (click)="limpiarCliente()">Cambiar</button>
+        </div>
+      </div>
+      <label class="field">
+        Entrenador
+        <select formControlName="entrenador_id">
+          <option [ngValue]="0">Selecciona entrenador</option>
+          <option *ngFor="let entrenador of entrenadores" [ngValue]="entrenador.id">{{ entrenador.nombre }}</option>
+        </select>
+      </label>
+      <label class="field">Nombre<input formControlName="nombre"></label>
+      <label class="field">Objetivo<input formControlName="objetivo"></label>
+      <label class="field">
+        Nivel
+        <select formControlName="nivel">
+          <option value="principiante">Principiante</option>
+          <option value="intermedio">Intermedio</option>
+          <option value="avanzado">Avanzado</option>
+        </select>
+      </label>
+      <label class="field">Fecha<input type="date" formControlName="fecha_asignacion"></label>
+    </div>
+
+    <label class="field">
+      Descripcion
+      <textarea formControlName="descripcion"></textarea>
+    </label>
+
+    <div formArrayName="ejercicios" class="grid">
+      <h3>Ejercicios</h3>
+      <div class="exercise-row" *ngFor="let ejercicio of ejercicios.controls; let i = index" [formGroupName]="i">
+        <input formControlName="ejercicio" placeholder="Ejercicio">
+        <input type="number" formControlName="series" placeholder="Series">
+        <input formControlName="repeticiones" placeholder="Repeticiones">
+        <input formControlName="descanso" placeholder="Descanso">
+        <button class="btn secondary" type="button" (click)="quitarEjercicio(i)">Quitar</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" type="button" (click)="agregarEjercicio()">Agregar ejercicio</button>
+      <button class="btn" type="submit">{{ editando ? 'Actualizar rutina' : 'Crear rutina' }}</button>
+      <button class="btn secondary" type="button" (click)="limpiar()">Limpiar</button>
+    </div>
+  </form>
+
+  <p class="mensaje ok" *ngIf="mensaje">{{ mensaje }}</p>
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+  <p class="mensaje" *ngIf="cargando && rutinas.length === 0">Cargando rutinas...</p>
+
+  <div class="panel table-tools">
+    <label class="field">
+      Buscar rutina
+      <input
+        type="search"
+        placeholder="Rutina, cliente o entrenador"
+        [(ngModel)]="busquedaTabla"
+        [ngModelOptions]="{ standalone: true }">
+    </label>
+  </div>
+
+  <div class="panel table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rutina</th>
+          <th>Cliente</th>
+          <th>Entrenador</th>
+          <th>Nivel</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rutina of rutinasFiltradas()">
+          <td>{{ rutina.nombre }}</td>
+          <td>{{ rutina.cliente }}</td>
+          <td>{{ rutina.entrenador }}</td>
+          <td>{{ rutina.nivel | titlecase }}</td>
+          <td>{{ rutina.fecha_asignacion | date:'mediumDate' }}</td>
+          <td>
+            <a class="btn secondary" [routerLink]="['/rutinas', rutina.id]">Detalle</a>
+            <button class="btn warning" type="button" (click)="editar(rutina)" *ngIf="puedeEditar()">Editar</button>
+            <button class="btn secondary" type="button" (click)="eliminar(rutina.id)" *ngIf="puedeEditar()">Eliminar</button>
+          </td>
+        </tr>
+        <tr *ngIf="!cargando && rutinasFiltradas().length === 0">
+          <td colspan="6">No hay rutinas asignadas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

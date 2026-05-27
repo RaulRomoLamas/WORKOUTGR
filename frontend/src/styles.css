@@ -1,0 +1,279 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #0b0b0b;
+  color: #f4f4f4;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.page {
+  display: grid;
+  gap: 22px;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: space-between;
+}
+
+.page-header h1 {
+  font-size: 30px;
+  margin: 0;
+}
+
+.page-header p {
+  color: #b7b7b7;
+  margin: 8px 0 0;
+}
+
+.panel {
+  background: #151515;
+  border: 1px solid #303030;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summary-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+label {
+  color: #cfcfcf;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+input,
+select,
+textarea {
+  background: #0f0f0f;
+  border: 1px solid #3b3b3b;
+  border-radius: 7px;
+  color: #ffffff;
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn {
+  background: #ef233c;
+  border: 0;
+  border-radius: 7px;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 10px 16px;
+}
+
+.btn.secondary {
+  background: #2f2f2f;
+}
+
+.btn.warning {
+  background: #fb8500;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #303030;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  color: #ffb703;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.badge {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 10px;
+}
+
+.badge.activa,
+.badge.cliente {
+  background: #123d25;
+  color: #8dffb3;
+}
+
+.badge.vencida,
+.badge.administrador {
+  background: #4a1119;
+  color: #ff9cac;
+}
+
+.badge.cancelada,
+.badge.entrenador {
+  background: #50320a;
+  color: #ffd083;
+}
+
+.mensaje {
+  border-radius: 7px;
+  color: #ffffff;
+  padding: 12px 14px;
+}
+
+.mensaje.ok {
+  background: #123d25;
+}
+
+.mensaje.error {
+  background: #4a1119;
+}
+
+@media (max-width: 760px) {
+  .page {
+    gap: 16px;
+  }
+
+  .page-header {
+    display: grid;
+    gap: 10px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .grid.cols-2,
+  .grid.cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    display: grid;
+  }
+
+  .actions .btn,
+  .actions button,
+  .btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .table-wrap {
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+
+  table {
+    min-width: 680px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    vertical-align: top;
+  }
+
+  td .btn,
+  td button,
+  td a.btn {
+    margin: 3px 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+  input,
+  select,
+  textarea,
+  .btn {
+    min-height: 44px;
+  }
+
+  table {
+    min-width: 620px;
+  }
+}

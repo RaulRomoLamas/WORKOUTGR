@@ -1,0 +1,22 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Resumen operativo de CARBONO POWERLAB.</p>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <app-card-resumen titulo="Usuarios" [valor]="resumen().totalUsuarios" detalle="Activos" tono="rojo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Clientes" [valor]="resumen().totalClientes" detalle="Registrados" tono="naranja" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Entrenadores" [valor]="resumen().totalEntrenadores" detalle="Equipo tecnico" tono="amarillo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Membresias activas" [valor]="resumen().membresiasActivas" detalle="Vigentes" tono="rojo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Vencen pronto" [valor]="resumen().membresiasVencenPronto" detalle="Siguientes 7 dias" tono="amarillo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Membresias vencidas" [valor]="resumen().membresiasVencidas" detalle="Requieren seguimiento" tono="naranja" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Pagos hoy" [valor]="resumen().pagosHoy" detalle="Registrados" tono="rojo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Rutinas" [valor]="resumen().totalRutinas" detalle="Asignadas" tono="amarillo" (seleccionado)="marcar($event)"></app-card-resumen>
+    <app-card-resumen titulo="Progreso" [valor]="resumen().totalRegistrosProgreso" detalle="Registros fisicos" tono="rojo" (seleccionado)="marcar($event)"></app-card-resumen>
+  </div>
+
+  <p class="mensaje ok" *ngIf="seleccionado">{{ seleccionado }}</p>
+</section>

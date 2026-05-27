@@ -1,0 +1,13 @@
+<app-navbar *ngIf="!esLogin()" (cerrarSesion)="cerrarSesion()"></app-navbar>
+
+<div [class.app-shell]="!esLogin()">
+  <app-sidebar
+    *ngIf="!esLogin()"
+    [rol]="rolActual()"
+    (cerrarSesion)="cerrarSesion()">
+  </app-sidebar>
+
+  <main [class.content]="!esLogin()">
+    <router-outlet></router-outlet>
+  </main>
+</div>

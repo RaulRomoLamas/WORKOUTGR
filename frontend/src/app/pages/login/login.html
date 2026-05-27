@@ -1,0 +1,27 @@
+<section class="login-page">
+  <div class="login-panel">
+    <div>
+      <img class="brand-mark" src="/logoCarbono.png" alt="Carbono Powerlab">
+      <h1>CARBONO POWERLAB</h1>
+      <p>Gestion de clientes, entrenadores, rutinas, progreso y membresias.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="ingresar()">
+      <label class="field">
+        Correo
+        <input type="email" formControlName="correo">
+      </label>
+
+      <label class="field">
+        Password
+        <input type="password" formControlName="password">
+      </label>
+
+      <p class="mensaje error" *ngIf="error">{{ error }}</p>
+
+      <button class="btn" type="submit" [disabled]="cargando">
+        {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
+</section>

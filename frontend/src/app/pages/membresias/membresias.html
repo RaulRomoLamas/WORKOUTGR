@@ -1,0 +1,153 @@
+<section class="page">
+  <div class="page-header">
+    <div>
+      <h1>Membresías</h1>
+      <p>Alta rápida de membresías con precios fijos.</p>
+    </div>
+  </div>
+
+  <form class="panel" [formGroup]="membresiaForm" (ngSubmit)="guardar()">
+    <div class="form-grid">
+      <div class="field client-search">
+        Cliente
+        <input
+          type="search"
+          name="busquedaCliente"
+          placeholder="Buscar por nombre"
+          [(ngModel)]="busquedaCliente"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="membresiaForm.controls.usuario_id.setValue(0)">
+
+        <div class="client-results" *ngIf="busquedaCliente || !membresiaForm.controls.usuario_id.value">
+          <button
+            *ngFor="let cliente of clientesFiltrados()"
+            type="button"
+            [class.selected]="membresiaForm.controls.usuario_id.value === cliente.id"
+            (click)="seleccionarCliente(cliente)">
+            <span>{{ cliente.nombre }}</span>
+            <small>{{ cliente.correo }}</small>
+          </button>
+
+          <p *ngIf="busquedaCliente && clientesFiltrados().length === 0">Sin coincidencias</p>
+        </div>
+
+        <div class="selected-client" *ngIf="membresiaForm.controls.usuario_id.value">
+          <span>{{ clienteSeleccionado() }}</span>
+          <button type="button" (click)="limpiarCliente()">Cambiar</button>
+        </div>
+      </div>
+      <label class="field">Inicio<input type="date" formControlName="fecha_inicio"></label>
+      <label class="field">
+        Estado
+        <select formControlName="estado">
+          <option value="activa">Activa</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="plans" role="radiogroup" aria-label="Planes de membresía">
+      <button
+        *ngFor="let plan of planes"
+        class="plan-option"
+        [class.selected]="membresiaForm.controls.plan_meses.value === plan.meses"
+        type="button"
+        role="radio"
+        [attr.aria-checked]="membresiaForm.controls.plan_meses.value === plan.meses"
+        (click)="seleccionarPlan(plan.meses)">
+        <span>{{ plan.nombre }}</span>
+        <strong>{{ plan.precio | currency:'MXN':'symbol':'1.0-0' }}</strong>
+      </button>
+    </div>
+
+    <div class="membership-summary">
+      <div>
+        <span>Termina</span>
+        <strong>{{ membresiaForm.controls.fecha_fin.value | date:'mediumDate' }}</strong>
+      </div>
+      <div>
+        <span>Total a cobrar</span>
+        <strong>{{ membresiaForm.controls.monto.value | currency:'MXN':'symbol':'1.0-0' }}</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" type="submit">{{ editando ? 'Actualizar membresía' : 'Registrar pago' }}</button>
+      <button class="btn secondary" type="button" (click)="limpiar()">Limpiar</button>
+    </div>
+  </form>
+
+  <p class="mensaje ok" *ngIf="mensaje">{{ mensaje }}</p>
+  <p class="mensaje error" *ngIf="error">{{ error }}</p>
+
+  <div class="reception-summary">
+    <div>
+      <span>Activas</span>
+      <strong>{{ resumenRecepcion().activas }}</strong>
+    </div>
+    <div>
+      <span>Vencen pronto</span>
+      <strong>{{ resumenRecepcion().vencenPronto }}</strong>
+    </div>
+    <div>
+      <span>Vencidas</span>
+      <strong>{{ resumenRecepcion().vencidas }}</strong>
+    </div>
+    <div>
+      <span>Pagos hoy</span>
+      <strong>{{ resumenRecepcion().pagosHoy }}</strong>
+    </div>
+    <div>
+      <span>Ingresos hoy</span>
+      <strong>{{ resumenRecepcion().ingresosHoy | currency:'MXN':'symbol':'1.0-0' }}</strong>
+    </div>
+  </div>
+
+  <div class="panel table-tools">
+    <label class="field">
+      Buscar membresía
+      <input
+        type="search"
+        placeholder="Nombre o correo del cliente"
+        [(ngModel)]="busquedaTabla"
+        [ngModelOptions]="{ standalone: true }">
+    </label>
+  </div>
+
+  <div class="panel table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Plan</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th>Último pago</th>
+          <th>Total pagado</th>
+          <th>Renovaciones</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let membresia of membresiasFiltradas()">
+          <td>{{ membresia.cliente }}</td>
+          <td>{{ planVisible(membresia) }}</td>
+          <td>{{ membresia.fecha_inicio | date:'mediumDate' }}</td>
+          <td>{{ membresia.fecha_fin | date:'mediumDate' }}</td>
+          <td><span class="badge" [ngClass]="estadoEfectivo(membresia)">{{ estadoVisible(membresia) }}</span></td>
+          <td>{{ ultimoPago(membresia) | currency:'MXN':'symbol':'1.2-2' }}</td>
+          <td>{{ montoTotal(membresia) | currency:'MXN':'symbol':'1.2-2' }}</td>
+          <td>{{ membresia.renovaciones || 0 }}</td>
+          <td>
+            <button class="btn warning" type="button" (click)="editar(membresia)">Editar</button>
+            <button class="btn secondary" type="button" (click)="eliminar(membresia.id)">Cancelar</button>
+          </td>
+        </tr>
+        <tr *ngIf="membresiasFiltradas().length === 0">
+          <td colspan="10">No hay membresías para mostrar.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
