@@ -12,8 +12,14 @@ const mensajesRoutes = require('./routes/mensajes.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:4200'
+].filter(Boolean);
 
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => {
